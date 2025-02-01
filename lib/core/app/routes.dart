@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xrghost/Interface/home.dart';
+import 'package:xrghost/Interface/Home/home.dart';
 import 'package:xrghost/Interface/management/errorpage.dart';
 import 'package:xrghost/core/imports.dart';
 
