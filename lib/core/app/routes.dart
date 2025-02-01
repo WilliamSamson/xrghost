@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:xrghost/Interface/home.dart';
+import 'package:xrghost/Interface/management/errorpage.dart';
 import 'package:xrghost/core/imports.dart';
 
 class AppRouter {
@@ -15,6 +17,6 @@ class AppRouter {
       // Add other routes (About, Projects)
     ],
     errorBuilder: (_, state) => ErrorPage(error: state.error),
-    redirect: (_, __) => _authGuard(), // Add auth logic if needed
+
   );
 }

@@ -1,78 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:xrghost/Interface/home.dart';
 import 'package:xrghost/core/imports.dart';
 import 'core/app/routes.dart';
 import 'core/app/theme.dart';
+import 'core/firebase/firebase_options.dart';
 import 'core/utils/responsive.dart';
-import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase and error handling
+  // Initialize Firebase using firebase_options.dart
   await _initializeFirebase();
 
-  // Run app with Riverpod + Router
-  runApp(
-    ProviderScope(
-      child: XRGhostApp(),
-    ),
-  );
+  // Run the app
+  runApp(const XRGhostApp());
 }
 
 Future<void> _initializeFirebase() async {
   try {
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+      options: DefaultFirebaseOptions.currentPlatform, // Use auto-generated options
     );
   } catch (e) {
     debugPrint("Firebase initialization failed: $e");
   }
 }
 
-class XRGhostApp extends HookWidget {
-  XRGhostApp({super.key});
+class XRGhostApp extends StatelessWidget {
+  const XRGhostApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final router = useMemoized(() => AppRouter().router);
-    final theme = useThemeController(); // Riverpod hook
-
-    return MaterialApp.router(
+    return MaterialApp(
       title: 'XRGhost',
       debugShowCheckedModeBanner: false,
 
-      // Dynamic Theme
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: theme.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      // Light Theme
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
+        textTheme: const TextTheme(
+          headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          bodyLarge: TextStyle(fontSize: 16, color: Colors.black87),
+        ),
+      ),
 
-      // Advanced Routing (go_router)
-      routerConfig: router,
+      // Dark Theme
+      darkTheme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.grey[900],
+        textTheme: const TextTheme(
+          headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          bodyLarge: TextStyle(fontSize: 16, color: Colors.white70),
+        ),
+      ),
 
-      // Responsive Design Baseline
-      builder: (context, child) {
-        ScreenMetrics.init(context); // Set responsive breakpoints
-        return ResponsiveBreakpoints.builder(
-          child: child!,
-          breakpoints: [
-            const Breakpoint(start: 0, end: 450, name: MOBILE),
-            const Breakpoint(start: 451, end: 800, name: TABLET),
-            const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          ],
-        );
-      },
+      // Default to light theme
+      themeMode: ThemeMode.light,
+
+      // Home Screen
+      home: const HomePage(),
     );
   }
-}
-
-// Riverpod controller for theme state
-final themeController = StateNotifierProvider<ThemeController, bool>((ref) {
-  return ThemeController();
-});
-
-class ThemeController extends StateNotifier<bool> {
-  ThemeController() : super(false);
-
-  void toggleTheme() => state = !state;
-  bool get isDarkMode => state;
 }

@@ -14,38 +14,41 @@ class ScreenMetrics {
   }
 
   static ScreenType _getScreenType(double width) {
-    if (width < 450) return ScreenType.mobile;
-    if (width < 800) return ScreenType.tablet;
+    if (width < 600) return ScreenType.mobile;
+    if (width < 1200) return ScreenType.tablet;
     return ScreenType.desktop;
   }
 }
 
-// Responsive Value Calculator
-T responsiveValue<T>(BuildContext context, {
-  required T mobile,
-  T? tablet,
-  required T desktop,
-}) {
-  final screenType = ScreenMetrics.screenType;
-
-  switch (screenType) {
-    case ScreenType.mobile:
-      return mobile;
-    case ScreenType.tablet:
-      return tablet ?? desktop;
-    case ScreenType.desktop:
-      return desktop;
-  }
-}
-
 // Context Extensions
-extension ResponsiveExtensions on BuildContext {
-  bool get isMobile => ScreenMetrics.screenType == ScreenType.mobile;
-  bool get isTablet => ScreenMetrics.screenType == ScreenType.tablet;
-  bool get isDesktop => ScreenMetrics.screenType == ScreenType.desktop;
+extension ResponsiveContextExtensions on BuildContext {
+  ScreenType get screenType {
+    final width = MediaQuery.of(this).size.width;
+    if (width < 600) return ScreenType.mobile;
+    if (width < 1200) return ScreenType.tablet;
+    return ScreenType.desktop;
+  }
+
+  bool get isMobile => screenType == ScreenType.mobile;
+  bool get isTablet => screenType == ScreenType.tablet;
+  bool get isDesktop => screenType == ScreenType.desktop;
+
+  double responsiveValue({
+    required double mobile,
+    required double tablet,
+    required double desktop,
+  }) {
+    switch (screenType) {
+      case ScreenType.mobile:
+        return mobile;
+      case ScreenType.tablet:
+        return tablet;
+      case ScreenType.desktop:
+        return desktop;
+    }
+  }
 
   double get responsivePadding => responsiveValue(
-    this,
     mobile: 16.0,
     tablet: 24.0,
     desktop: 32.0,

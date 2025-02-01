@@ -6,4 +6,6 @@ export 'package:google_fonts/google_fonts.dart';
 export 'package:flutter_hooks/flutter_hooks.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:hooks_riverpod/hooks_riverpod.dart';
+export 'package:responsive_framework/responsive_framework.dart';
+
 

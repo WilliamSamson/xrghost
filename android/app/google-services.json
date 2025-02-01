@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "98124915941",
+    "project_id": "xr-ghost",
+    "storage_bucket": "xr-ghost.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98124915941:android:a0d6c40d605ee50f2c600c",
+        "android_client_info": {
+          "package_name": "com.example.xrghost"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ0GX7Pk2-FvZs7SuoQq0YsQ5Pm3vNimc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
