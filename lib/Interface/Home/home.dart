@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:xrghost/Interface/Home/profile.dart';
+import 'package:xrghost/Interface/Home/web_footer.dart';
 import 'package:xrghost/core/imports.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,9 +19,9 @@ class HomePage extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             // Left Navigation Rail
             _buildNavigationRail(context),
-
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -31,6 +32,7 @@ class HomePage extends StatelessWidget {
                     const SizedBox(height: 40),
                     // Team Section
                     _buildTeamSection(context),
+                    WebsiteFooter(),
                   ],
                 ),
               ),
@@ -90,7 +92,7 @@ class HomePage extends StatelessWidget {
                         crossAxisCellCount: 2,
                         child: _StatCards(
                           number: '3',
-                          label: 'Won Hackathons',
+                          label: 'Hackathons',
                           color: Colors.orange,
                         ),
                       ),
@@ -118,7 +120,9 @@ class HomePage extends StatelessWidget {
       padding: const EdgeInsets.only(right: 40),
       child: RotatedBox(
         quarterTurns: -1,
-        child: Row(
+        child:  Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 15),
+    child:Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _NavItem(title: 'Channel', onTap: () {}),
@@ -126,6 +130,7 @@ class HomePage extends StatelessWidget {
             _NavItem(title: 'Research', onTap: () {}),
             _NavItem(title: 'Clients', onTap: () {}),
           ],
+        ),
         ),
       ),
     );
