@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:xrghost/Interface/Home/test_file.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:xrghost/Interface/Home/profile.dart';
 import 'package:xrghost/core/imports.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,47 +12,104 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Left Navigation Rail
-              _buildNavigationRail(context),
+      backgroundColor: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Left Navigation Rail
+            _buildNavigationRail(context),
 
-              Expanded(
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Basic usage
-                    ProfileCard(),
-
-
-                    // Header Section
+                    _buildTop(context),
                     _buildHeaderSection(context),
-
                     const SizedBox(height: 40),
-
-                    // Stats Grid
-                    _buildStatsGrid(context),
-
-                    const SizedBox(height: 40),
-
                     // Team Section
                     _buildTeamSection(context),
-
-                    const SizedBox(height: 40),
-
-                    // Charts Section
-                    _buildChartsSection(context),
                   ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTop(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ProfileCard(),
+        Padding(
+          padding: const EdgeInsets.only(left: 20, right: 10, top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Portfolio',
+                style: GoogleFonts.ubuntu(
+                  fontSize: 80,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: 350, // Ensures the width is constrained
+                height: 300, // Adjust based on the required height
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: StaggeredGrid.count(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    children: const [
+                      StaggeredGridTile.fit(
+                        crossAxisCellCount: 2,
+                        child: _StatCards(
+                          number: '20+',
+                          label: 'Projects',
+                          color: Colors.blue,
+                        ),
+                      ),
+                      StaggeredGridTile.fit(
+                        crossAxisCellCount: 1,
+                        child: _StatCards(
+                          number: '10+',
+                          label: 'Clients',
+                          color: Colors.green,
+                        ),
+                      ),
+                      StaggeredGridTile.fit(
+                        crossAxisCellCount: 2,
+                        child: _StatCards(
+                          number: '3',
+                          label: 'Won Hackathons',
+                          color: Colors.orange,
+                        ),
+                      ),
+                      StaggeredGridTile.fit(
+                        crossAxisCellCount: 1,
+                        child: _StatCards(
+                          number: '3',
+                          label: 'Collabs',
+                          color: Colors.purple,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -97,22 +155,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsGrid(BuildContext context) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 3,
-      childAspectRatio: 1.2,
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 16,
-      children: const [
-        _StatCard(number: '251', label: 'Projects'),
-        _StatCard(number: '156', label: 'Clients'),
-        _StatCard(number: '172', label: 'Collaborations'),
-      ],
-    );
-  }
-
   Widget _buildTeamSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,31 +171,12 @@ class HomePage extends StatelessWidget {
           spacing: 20,
           runSpacing: 20,
           children: const [
-            _TeamMember(name: 'Jon', role: 'Lead Developer'),
-            _TeamMember(name: 'Daniel', role: 'Creative Director'),
+            _TeamMember(name: 'Kayode', role: 'Lead Developer'),
+            _TeamMember(name: 'Fikayo', role: 'Flutter Dev'),
+            _TeamMember(name: 'Tega', role: 'A.I Dev'),
           ],
         ),
       ],
-    );
-  }
-
-  Widget _buildChartsSection(BuildContext context) {
-    return Container(
-      height: 300,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(24),
-      child: const Placeholder(), // Replace with actual chart implementation
     );
   }
 }
@@ -177,7 +200,7 @@ class _NavItem extends StatelessWidget {
             style: GoogleFonts.ubuntu(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: Colors.grey[600],
+              color: Colors.grey.shade800,
             ),
           ),
         ),
@@ -186,49 +209,38 @@ class _NavItem extends StatelessWidget {
   }
 }
 
-class _StatCard extends StatelessWidget {
+class _StatCards extends StatelessWidget {
   final String number;
   final String label;
+  final Color color;
 
-  const _StatCard({required this.number, required this.label});
+  const _StatCards({
+    super.key,
+    required this.number,
+    required this.label,
+    this.color = Colors.grey,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            number,
-            style: GoogleFonts.ubuntu(
-              fontSize: 36,
-              fontWeight: FontWeight.w700,
-              color: Colors.blue,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: GoogleFonts.ubuntu(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
-          ),
-        ],
+    return Card(
+      color: color,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(number,
+                style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            Text(label,
+                style: const TextStyle(fontSize: 16, color: Colors.white70)),
+          ],
+        ),
       ),
     );
   }
@@ -244,7 +256,7 @@ class _TeamMember extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 200,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
